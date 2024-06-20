@@ -1,0 +1,46 @@
+:root{
+    --icon-width: 79px;
+    --icon-height: 79px;
+    --num-of-icons: 9;
+} 
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#reel-main {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: auto;
+}
+
+body {
+    background-color: #393E46;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.slots {
+    width: calc(3.5 * var(--icon-width));
+    height: calc(3 * var(--icon-height));
+    border: 3px solid black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: calc(0.3 * var(--icon-height));
+
+}
+
+.slots .reel {
+    border: 1px solid black;
+    width: var(--icon-width);
+    height: calc(3 * var(--icon-height));
+    background-image: url(./resources/slotreel.webp);
+    background-repeat: repeat-y;
+    background-position: 0 0;
+}
