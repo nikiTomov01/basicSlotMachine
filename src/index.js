@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, getDoc, doc, setDoc, query, getDocs} from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCeDaUAnVK0iANNiSTZ7k0z_K9VuX6LTR4",
@@ -14,6 +15,64 @@ const firebaseConfig = {
 //initializations
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+
+//db stuff
+const addDbBtn = document.getElementById("add-to-db");
+var userM;
+const playerBalance = document.getElementById("player-balance");
+
+async function onLogin(currUser) {
+    const docRef = doc(db, `${currUser.email}`, `${currUser.uid}`);
+    const docSnap = await getDoc(docRef);
+    userM = docSnap.data().userMoney;
+    console.log("userM = " + userM);
+    playerBalance.innerHTML = `${docSnap.data().user}'s balance: ${docSnap.data().userMoney}`;
+}
+
+async function onSignup(currUser) {
+    const docRef = await setDoc(doc(db, `${currUser.email}`, `${currUser.uid}`), {
+        user: `${currUser.email}`,
+        userMoney: 500
+    });
+}
+
+async function onRoll(currUser) {
+    userM -= 10;
+    console.log(userM);
+    const docRef = doc(db, `${currUser.email}`, `${currUser.uid}`);
+    await setDoc(docRef, {
+        userMoney: userM
+    })
+    const docSnap = await getDoc(docRef);
+    //console.log("new user money: " + docSnap.data().userMoney);
+    playerBalance.innerHTML = `${docSnap.data().user}'s balance: ${docSnap.data().userMoney}`;
+}
+
+async function onWin(currUser) {
+    userM += 100;
+    console.log(userM);
+    const docRef = doc(db, `${currUser.email}`, `${currUser.uid}`);
+    await setDoc(docRef, {
+        userMoney: userM
+    })
+    const docSnap = await getDoc(docRef);
+    //console.log("new user money: " + docSnap.data().userMoney);
+    playerBalance.innerHTML = `${docSnap.data().user}'s balance: ${docSnap.data().userMoney}`;
+}
+
+// addDbBtn.addEventListener("click", async () => {
+//     try {
+//         const docRef = await setDoc(doc(db, `${user.email}`, `${user.uid}`), {
+//             user: `${user.email}`,
+//             userMoney: 500
+//         });
+
+//         //console.log("Document writtein with ID: ", docRef.id);
+//     } catch (e) {
+//         console.error("Error adding document: ", e);
+//     }
+// })
 
 
 
@@ -30,6 +89,7 @@ var tempSignupPass = "";
 var loginAttemp = false;
 var singupAttemp = false;
 
+//login button stuff
 logInBtn.addEventListener("click", () => {
     if (loginAttemp == false) {
         loginAttemp = true;
@@ -57,6 +117,7 @@ logInBtn.addEventListener("click", () => {
                     .then((userCredential) => {
                         user = userCredential.user;
                         console.log(user);
+                        onLogin(user);
                         document.getElementById("loged-in-as").innerHTML = "Logged in as " + user.email;
                     })
                     .catch ((error) => {
@@ -77,6 +138,7 @@ logInBtn.addEventListener("click", () => {
 
 })
 
+//sign up button stuff
 signupBtn.addEventListener("click", () => {
     if (singupAttemp == false) {
         singupAttemp = true;
@@ -105,6 +167,7 @@ signupBtn.addEventListener("click", () => {
                         //signed up
                         user = userCredential.user;
                         console.log(user);
+                        onSignup(user);
                     
                     })
                     .catch((error) => {
@@ -139,6 +202,7 @@ var rolling = false;
 const rollBtn = document.getElementById("roll-btn");
 rollBtn.addEventListener("click", () => {
     if (!rolling) {
+        onRoll(user);
         rollAll();
     }
 });
@@ -179,6 +243,7 @@ function rollAll() {
             // check win condition
             if ((indexes[0] === indexes[1]) || (indexes[0] === indexes[1] === indexes[2])) {
                 console.log("WINWINWINWI!");
+                onWin(user);
             }
 
             setTimeout(() => {rolling = false;}, 1000);
