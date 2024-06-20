@@ -42,6 +42,7 @@ async function onRoll(currUser) {
     console.log(userM);
     const docRef = doc(db, `${currUser.email}`, `${currUser.uid}`);
     await setDoc(docRef, {
+        user: `${currUser.email}`,
         userMoney: userM
     })
     const docSnap = await getDoc(docRef);
@@ -54,6 +55,7 @@ async function onWin(currUser) {
     console.log(userM);
     const docRef = doc(db, `${currUser.email}`, `${currUser.uid}`);
     await setDoc(docRef, {
+        user: `${currUser.email}`,
         userMoney: userM
     })
     const docSnap = await getDoc(docRef);
