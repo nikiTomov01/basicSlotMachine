@@ -6,6 +6,14 @@ const timePerIcon = 100;
 const indexes = [0, 0, 0];
 const iconMap = ['banana', 'seven', 'cherry', 'plum', 'orange', 'bell', 'bar', 'lemon', 'melon'];
 
+var rolling = false;
+const rollBtn = document.getElementById("roll-btn");
+rollBtn.addEventListener("click", () => {
+    if (!rolling) {
+        rollAll();
+    }
+});
+
 const roll = (reel, offset = 0) => {
     const delta = (offset + 2) * numOfIcons + Math.floor(Math.random() * numOfIcons);
     const style = getComputedStyle(reel);
@@ -27,6 +35,7 @@ const roll = (reel, offset = 0) => {
 };
 
 function rollAll() {
+    rolling = true;
     const reelsList = document.querySelectorAll('.slots > .reel');
     Promise
     .all( [...reelsList].map((reel, i) => roll(reel, i)))
@@ -43,11 +52,9 @@ function rollAll() {
                 console.log("WINWINWINWI!");
             }
 
-            setTimeout(rollAll, 3000);
+            setTimeout(() => {rolling = false;}, 1000);
         });
     // [...reelsList].map((reel, i) => {
     //     roll(reel, i).then((delta) => { console.log(delta)});
     // });
 }
-
-rollAll();

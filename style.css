@@ -23,6 +23,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    flex-direction: column;
 }
 
 .slots {
@@ -43,4 +44,18 @@ body {
     background-image: url(./resources/slotreel.webp);
     background-repeat: repeat-y;
     background-position: 0 0;
+}
+
+#roll-btn {
+    margin: 10px;
+    width: 250px;
+    height: 65px;
+    border-radius: 50px;
+    border: 2px solid rgb(0, 0, 0);
+    background: linear-gradient(0deg, rgba(250,240,93,1) 0%, rgba(253,187,45,1) 100%);
+}
+
+#roll-btn:hover {
+    background: linear-gradient(0deg, rgb(255, 246, 115) 0%, rgb(255, 197, 72) 100%);
+    cursor: pointer;
 }
