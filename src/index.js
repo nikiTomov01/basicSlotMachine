@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCeDaUAnVK0iANNiSTZ7k0z_K9VuX6LTR4",
@@ -18,18 +18,21 @@ const auth = getAuth(app);
 
 
 //login/sign up form stuff
+var user;
 const logInBtn = document.getElementById("login-btn");
 const signupBtn = document.getElementById("signup-btn");
 
 var tempLoginEmail = "";
 var tempLoginPass = "";
+var tempSignupEmail = "";
+var tempSignupPass = "";
 
 var loginAttemp = false;
 var singupAttemp = false;
 
-signupBtn.addEventListener("click", () => {
-    if (singupAttemp == false) {
-        singupAttemp = true;
+logInBtn.addEventListener("click", () => {
+    if (loginAttemp == false) {
+        loginAttemp = true;
         const loginDiv = document.createElement("div");
         loginDiv.id = "login-form";
     
@@ -49,15 +52,16 @@ signupBtn.addEventListener("click", () => {
             tempLoginEmail = emailInput.value;
             tempLoginPass = passwordInput.value;
             if (tempLoginEmail !== "" && tempLoginPass !== "") {
-                singupAttemp = false;
-                createUserWithEmailAndPassword(auth, tempLoginEmail, tempLoginPass)
+                loginAttemp = false;
+                signInWithEmailAndPassword(auth, tempLoginEmail, tempLoginPass)
                     .then((userCredential) => {
-                        //signed up
-                        const user = userCredential.user;
+                        user = userCredential.user;
+                        console.log(user);
+                        document.getElementById("loged-in-as").innerHTML = "Logged in as " + user.email;
                     })
-                    .catch((error) => {
+                    .catch ((error) => {
                         const errorCode = error.code;
-                        const errorMessage = error.Message;
+                        const errorMessage = error.message;
                         console.log(errorCode + " : " + errorMessage);
                     })
                 loginDiv.remove();
@@ -69,6 +73,54 @@ signupBtn.addEventListener("click", () => {
         loginDiv.appendChild(submitLoginBtn);
 
         document.body.appendChild(loginDiv);
+    }
+
+})
+
+signupBtn.addEventListener("click", () => {
+    if (singupAttemp == false) {
+        singupAttemp = true;
+        const signupDiv = document.createElement("div");
+        signupDiv.id = "signup-form";
+    
+        const emailInput = document.createElement("input");
+        emailInput.id = "signup-email";
+        emailInput.className = "signup-input-item";
+        emailInput.placeholder = "Email";
+    
+        const passwordInput = document.createElement("input");
+        passwordInput.id = "signup-pass";
+        passwordInput.className = "signup-input-item";
+        passwordInput.placeholder = "Password";
+    
+        const submitLoginBtn = document.createElement("button");
+        submitLoginBtn.innerHTML = "signup";
+        submitLoginBtn.addEventListener("click", () => {
+            tempSignupEmail = emailInput.value;
+            tempSignupPass = passwordInput.value;
+            if (tempSignupEmail !== "" && tempSignupPass !== "") {
+                singupAttemp = false;
+                createUserWithEmailAndPassword(auth, tempSignupEmail, tempSignupPass)
+                    .then((userCredential) => {
+                        //signed up
+                        user = userCredential.user;
+                        console.log(user);
+                    
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.Message;
+                        console.log(errorCode + " : " + errorMessage);
+                    })
+                signupDiv.remove();
+            }
+        })
+    
+        signupDiv.appendChild(emailInput);
+        signupDiv.appendChild(passwordInput);
+        signupDiv.appendChild(submitLoginBtn);
+
+        document.body.appendChild(signupDiv);
     }
 
 })
