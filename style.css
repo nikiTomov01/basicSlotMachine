@@ -9,17 +9,21 @@
     padding: 0;
 }
 
+body {
+    background-color: #393E46;
+    
+}
+
+.hidden { 
+    display: none;
+}
+
 #reel-main {
     position: fixed;
     left: 0;
     top: 0;
     height: 100vh;
     width: auto;
-}
-
-body {
-    background-color: #393E46;
-
 }
 
 .slots-container { 
@@ -68,6 +72,22 @@ body {
     cursor: pointer;
 }
 
+.up-btn {
+    width: 100px;
+    height: 35px;
+    float:right;
+    margin: 10px;
+    border: 2px solid #FFBF78;
+    background-color: #FF7D29;
+    border-radius: 20px;
+}
+
+.up-btn:hover {
+    background-color: #ff8431;
+    color: #FEFFD2;
+    cursor: pointer;
+}
+
 #login-form {
     background-color: purple;
     width: 300px;
@@ -78,6 +98,10 @@ body {
     align-items: center;
     border-radius: 10px;
     margin: 10px 0px 0px 0px;
+}
+
+#login-form h2 {
+    color: white;
 }
 
 .login-input-item {

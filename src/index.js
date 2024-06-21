@@ -28,6 +28,10 @@ async function onLogin(currUser) {
     userM = docSnap.data().userMoney;
     console.log("userM = " + userM);
     playerBalance.innerHTML = `${docSnap.data().user}'s balance: ${docSnap.data().userMoney}`;
+    document.getElementById("loged-in-as").innerHTML = "Logged in as " + currUser.email;
+    document.getElementById("roll-btn").classList.remove("hidden");
+    document.getElementById("login-btn").classList.add("hidden");
+    document.getElementById("signup-btn").classList.add("hidden");
 }
 
 async function onSignup(currUser) {
@@ -35,6 +39,7 @@ async function onSignup(currUser) {
         user: `${currUser.email}`,
         userMoney: 500
     });
+    onLogin(currUser);
 }
 
 async function onRoll(currUser) {
@@ -97,6 +102,9 @@ logInBtn.addEventListener("click", () => {
         loginAttemp = true;
         const loginDiv = document.createElement("div");
         loginDiv.id = "login-form";
+
+        const header = document.createElement("h2");
+        header.innerHTML = "Login";
     
         const emailInput = document.createElement("input");
         emailInput.id = "login-email";
@@ -118,9 +126,8 @@ logInBtn.addEventListener("click", () => {
                 signInWithEmailAndPassword(auth, tempLoginEmail, tempLoginPass)
                     .then((userCredential) => {
                         user = userCredential.user;
-                        console.log(user);
+                        //console.log(user);
                         onLogin(user);
-                        document.getElementById("loged-in-as").innerHTML = "Logged in as " + user.email;
                     })
                     .catch ((error) => {
                         const errorCode = error.code;
@@ -131,6 +138,7 @@ logInBtn.addEventListener("click", () => {
             }
         })
     
+        loginDiv.appendChild(header);
         loginDiv.appendChild(emailInput);
         loginDiv.appendChild(passwordInput);
         loginDiv.appendChild(submitLoginBtn);
@@ -168,7 +176,7 @@ signupBtn.addEventListener("click", () => {
                     .then((userCredential) => {
                         //signed up
                         user = userCredential.user;
-                        console.log(user);
+                        //console.log(user);
                         onSignup(user);
                     
                     })
