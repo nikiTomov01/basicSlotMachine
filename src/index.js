@@ -115,6 +115,7 @@ logInBtn.addEventListener("click", () => {
         passwordInput.id = "login-pass";
         passwordInput.className = "login-input-item";
         passwordInput.placeholder = "Password";
+        passwordInput.type = "password";
     
         const submitLoginBtn = document.createElement("button");
         submitLoginBtn.innerHTML = "Login";
@@ -164,6 +165,7 @@ signupBtn.addEventListener("click", () => {
         passwordInput.id = "signup-pass";
         passwordInput.className = "signup-input-item";
         passwordInput.placeholder = "Password";
+        passwordInput.type = "password";
     
         const submitLoginBtn = document.createElement("button");
         submitLoginBtn.innerHTML = "signup";
